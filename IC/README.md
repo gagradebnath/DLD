@@ -50,22 +50,25 @@ from IC.ic_7400 import IC7400
 nand_ic = IC7400()
 nand_ic.connect_power()
 
-# Use Gate A (pins 1,2 → 3)
-result = nand_ic.gate_a(1, 0)  # Returns 1 (NAND of 1,0)
+# Use specific gate method (preferred)
+result = nand_ic.gate_a(1, 0)  # Gate A: NAND(1,0) = 1
+result = nand_ic.gate_b(1, 1)  # Gate B: NAND(1,1) = 0
+result = nand_ic.gate_c(0, 0)  # Gate C: NAND(0,0) = 1
+result = nand_ic.gate_d(0, 1)  # Gate D: NAND(0,1) = 1
 
-# Use Gate B (pins 4,5 → 6)
-result = nand_ic.gate_b(1, 1)  # Returns 0 (NAND of 1,1)
-
-# Use Gate C (pins 9,10 → 8)
-result = nand_ic.gate_c(0, 0)  # Returns 1 (NAND of 0,0)
-
-# Use Gate D (pins 12,13 → 11)
-result = nand_ic.gate_d(0, 1)  # Returns 1 (NAND of 0,1)
+# Alternative: Use get_gate_output method
+result = nand_ic.get_gate_output(1, 1, 0)  # Gate 1: NAND(1,0) = 1
 
 # Test the IC
 if nand_ic.test_ic():
     print("IC7400 is working correctly")
 ```
+
+**Gate Methods**:
+- `gate_a(a, b)` - Gate A (pins 1,2 → 3)
+- `gate_b(a, b)` - Gate B (pins 4,5 → 6)  
+- `gate_c(a, b)` - Gate C (pins 9,10 → 8)
+- `gate_d(a, b)` - Gate D (pins 12,13 → 11)
 
 **Truth Table (per gate)**:
 | A | B | Output |
@@ -87,18 +90,17 @@ nor_ic = IC7402()
 nor_ic.connect_power()
 
 # Gate A (pins 2,3 → 1)
-result = nor_ic.gate_a(0, 0)  # Returns 1 (NOR of 0,0)
+result = nor_ic.gate_a(0, 0)  # NOR(0,0) = 1
 
 # Gate B (pins 5,6 → 4)
-result = nor_ic.gate_b(1, 0)  # Returns 0 (NOR of 1,0)
+result = nor_ic.gate_b(1, 0)  # NOR(1,0) = 0
 
 # Gate C (pins 8,9 → 10)
-result = nor_ic.gate_c(0, 1)  # Returns 0 (NOR of 0,1)
+result = nor_ic.gate_c(0, 1)  # NOR(0,1) = 0
 
 # Gate D (pins 11,12 → 13)
-result = nor_ic.gate_d(1, 1)  # Returns 0 (NOR of 1,1)
+result = nor_ic.gate_d(1, 1)  # NOR(1,1) = 0
 ```
-
 ### IC7404 - Hex Inverter
 
 **Package**: 14-pin DIP  
@@ -131,16 +133,16 @@ and_ic = IC7408()
 and_ic.connect_power()
 
 # Gate A (pins 1,2 → 3)
-result = and_ic.gate_a(1, 1)  # Returns 1 (AND of 1,1)
+result = and_ic.gate_a(1, 1)  # AND(1,1) = 1
 
 # Gate B (pins 4,5 → 6)
-result = and_ic.gate_b(1, 0)  # Returns 0 (AND of 1,0)
+result = and_ic.gate_b(1, 0)  # AND(1,0) = 0
 
 # Gate C (pins 9,10 → 8)
-result = and_ic.gate_c(0, 1)  # Returns 0 (AND of 0,1)
+result = and_ic.gate_c(0, 1)  # AND(0,1) = 0
 
 # Gate D (pins 12,13 → 11)
-result = and_ic.gate_d(0, 0)  # Returns 0 (AND of 0,0)
+result = and_ic.gate_d(0, 0)  # AND(0,0) = 0
 ```
 
 ### IC7410 - Triple 3-Input NAND Gate
@@ -155,13 +157,13 @@ nand3_ic = IC7410()
 nand3_ic.connect_power()
 
 # Gate A (pins 1,2,13 → 12)
-result = nand3_ic.gate_a(1, 1, 1)  # Returns 0 (NAND of 1,1,1)
+result = nand3_ic.gate_a(1, 1, 1)  # NAND(1,1,1) = 0
 
 # Gate B (pins 3,4,5 → 6)
-result = nand3_ic.gate_b(1, 0, 1)  # Returns 1 (NAND of 1,0,1)
+result = nand3_ic.gate_b(1, 0, 1)  # NAND(1,0,1) = 1
 
 # Gate C (pins 9,10,11 → 8)
-result = nand3_ic.gate_c(0, 0, 0)  # Returns 1 (NAND of 0,0,0)
+result = nand3_ic.gate_c(0, 0, 0)  # NAND(0,0,0) = 1
 ```
 
 ### IC7420 - Dual 4-Input NAND Gate
@@ -176,10 +178,10 @@ nand4_ic = IC7420()
 nand4_ic.connect_power()
 
 # Gate A (pins 1,2,4,5 → 6)
-result = nand4_ic.gate_a(1, 1, 1, 1)  # Returns 0 (NAND of 1,1,1,1)
+result = nand4_ic.gate_a(1, 1, 1, 1)  # NAND(1,1,1,1) = 0
 
 # Gate B (pins 9,10,12,13 → 8)
-result = nand4_ic.gate_b(1, 0, 1, 1)  # Returns 1 (NAND of 1,0,1,1)
+result = nand4_ic.gate_b(1, 0, 1, 1)  # NAND(1,0,1,1) = 1
 ```
 
 ### IC7430 - Single 8-Input NAND Gate
@@ -194,8 +196,8 @@ nand8_ic = IC7430()
 nand8_ic.connect_power()
 
 # Single gate (pins 1,2,3,4,5,6,11,12 → 8)
-result = nand8_ic.gate(1, 1, 1, 1, 1, 1, 1, 1)  # Returns 0
-result = nand8_ic.gate(1, 1, 1, 1, 1, 1, 1, 0)  # Returns 1
+result = nand8_ic.gate(1, 1, 1, 1, 1, 1, 1, 1)  # NAND all 1s = 0
+result = nand8_ic.gate(1, 1, 1, 1, 1, 1, 1, 0)  # NAND with one 0 = 1
 ```
 
 ### IC7432 - Quad 2-Input OR Gate
@@ -210,16 +212,16 @@ or_ic = IC7432()
 or_ic.connect_power()
 
 # Gate A (pins 1,2 → 3)
-result = or_ic.gate_a(0, 0)  # Returns 0 (OR of 0,0)
+result = or_ic.gate_a(0, 0)  # OR(0,0) = 0
 
 # Gate B (pins 4,5 → 6)
-result = or_ic.gate_b(1, 0)  # Returns 1 (OR of 1,0)
+result = or_ic.gate_b(1, 0)  # OR(1,0) = 1
 
 # Gate C (pins 9,10 → 8)
-result = or_ic.gate_c(0, 1)  # Returns 1 (OR of 0,1)
+result = or_ic.gate_c(0, 1)  # OR(0,1) = 1
 
 # Gate D (pins 12,13 → 11)
-result = or_ic.gate_d(1, 1)  # Returns 1 (OR of 1,1)
+result = or_ic.gate_d(1, 1)  # OR(1,1) = 1
 ```
 
 ### IC7486 - Quad 2-Input XOR Gate
@@ -234,16 +236,16 @@ xor_ic = IC7486()
 xor_ic.connect_power()
 
 # Gate A (pins 1,2 → 3)
-result = xor_ic.gate_a(0, 0)  # Returns 0 (XOR of 0,0)
+result = xor_ic.gate_a(0, 0)  # XOR(0,0) = 0
 
 # Gate B (pins 4,5 → 6)
-result = xor_ic.gate_b(1, 0)  # Returns 1 (XOR of 1,0)
+result = xor_ic.gate_b(1, 0)  # XOR(1,0) = 1
 
 # Gate C (pins 9,10 → 8)
-result = xor_ic.gate_c(0, 1)  # Returns 1 (XOR of 0,1)
+result = xor_ic.gate_c(0, 1)  # XOR(0,1) = 1
 
 # Gate D (pins 12,13 → 11)
-result = xor_ic.gate_d(1, 1)  # Returns 0 (XOR of 1,1)
+result = xor_ic.gate_d(1, 1)  # XOR(1,1) = 0
 ```
 
 ---
@@ -277,6 +279,12 @@ for addr in range(8):
     outputs = decoder.decode(a2, a1, a0, e1=0, e2=0, e3=1)
     selected_bank = outputs.index(0)  # Find active output
     print(f"Address {addr:03b}: Select {memory_banks[selected_bank]}")
+
+# Check which output is selected
+selected = decoder.get_selected_output()  # Returns output number (0-7) or None
+
+# Use as demultiplexer
+outputs = decoder.demultiplex(data_input=1, a2=1, a1=0, a0=1)  # Route data to Y5
 ```
 
 **Enable Truth Table**:
@@ -309,6 +317,10 @@ outputs2 = dual_decoder.decode_2(a1=0, a0=1, enable=0)
 # Chip select logic example
 chip_enables = dual_decoder.decode_1(a1=1, a0=1, enable=0)  # Enable chip 3
 peripheral_enables = dual_decoder.decode_2(a1=0, a0=0, enable=0)  # Enable peripheral 0
+
+# Get selected outputs
+selected1 = dual_decoder.get_selected_output_1()  # Returns 0-3 or None
+selected2 = dual_decoder.get_selected_output_2()  # Returns 0-3 or None
 ```
 
 ### Encoders
@@ -324,7 +336,7 @@ from IC.ic_74147 import IC74147
 encoder = IC74147()
 encoder.connect_power()
 
-# Single input active (input 7)
+# Single input active (input 7) - note: inputs are active-low
 inputs = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 0, 8: 1, 9: 1}
 bcd_output = encoder.encode_decimal(inputs)
 # Returns: [1, 0, 0, 0] (inverted BCD for 7)
@@ -332,20 +344,24 @@ bcd_output = encoder.encode_decimal(inputs)
 decimal_value = encoder.get_bcd_output()
 # Returns: 7
 
-# Multiple inputs active (priority encoding)
+# Multiple inputs active (priority encoding - highest wins)
 inputs = {0: 0, 1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 0}
 bcd_output = encoder.encode_decimal(inputs)
 decimal_value = encoder.get_bcd_output()
 # Returns: 9 (highest priority active input)
 
-# Keyboard encoder example
+# Keypad encoder example
 keypad_inputs = {0: 1, 1: 1, 2: 1, 3: 0, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
 if encoder.encode_decimal(keypad_inputs):
     pressed_key = encoder.get_bcd_output()
     print(f"Key {pressed_key} pressed")
+
+# Check if any input is active
+is_active = encoder.is_any_input_active()  # Returns True/False
 ```
 
-**Input Priority** (highest to lowest): 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+**Input Priority** (highest to lowest): 9, 8, 7, 6, 5, 4, 3, 2, 1, 0  
+**Note**: All inputs and outputs are active-low
 
 #### IC74148 - 8-to-3 Line Priority Encoder with Cascade
 
@@ -358,7 +374,7 @@ from IC.ic_74148 import IC74148
 priority_encoder = IC74148()
 priority_encoder.connect_power()
 
-# Single interrupt active (IRQ 5)
+# Single interrupt active (IRQ 5) - inputs are active-low
 irq_inputs = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 0, 6: 1, 7: 1}
 a2, a1, a0, gs, eo = priority_encoder.encode_inputs(irq_inputs, enable_input=0)
 # Returns: (0, 1, 0, 0, 1) - Binary 5 inverted, GS active, EO inactive
@@ -373,13 +389,17 @@ highest_irq = (1-a2)*4 + (1-a1)*2 + (1-a0)*1  # = 7 (highest priority)
 
 # Interrupt controller example
 irq_names = ["Timer", "Keyboard", "Serial", "Network", "Mouse", "Sound", "Disk", "NMI"]
-if gs == 0:  # Group select active
+if gs == 0:  # Group select active (interrupt present)
     print(f"Interrupt: {irq_names[highest_irq]}")
+
+# Get highest priority input directly
+highest = priority_encoder.get_highest_priority_input()  # Returns 0-7 or None
 ```
 
 **Cascade Signals**:
 - **GS** (Group Select): 0 = valid input present, 1 = no inputs
-- **EO** (Enable Output): 0 = enable next stage, 1 = disable next stage
+- **EO** (Enable Output): 0 = enable next stage, 1 = disable next stage  
+**Input Priority** (highest to lowest): 7, 6, 5, 4, 3, 2, 1, 0
 
 ### Multiplexers
 
@@ -407,14 +427,20 @@ program_memory = [0x00, 0xFF, 0xA5, 0x5A, 0x33, 0xCC, 0xF0, 0x0F,
 
 for address in range(16):
     data_out = mux16.select_input(address, program_memory)
-    print(f"Address 0x{address:X}: Data 0x{program_memory[address]:02X} -> Output {data_out}")
+    original = program_memory[address]
+    print(f"Address 0x{address:X}: Data 0x{original:02X} -> Output {data_out} (inverted)")
 
-# Function generator
+# Function generator with enable control
 sine_table = [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0]  # Approximate sine
 for phase in range(16):
-    sine_out = mux16.select_input(phase, sine_table)
-    print(f"Phase {phase}: Sine = {1-sine_out}")  # Invert output
+    sine_out = mux16.select_input(phase, sine_table, enable=0)  # Enable active-low
+    print(f"Phase {phase}: Sine = {1-sine_out}")  # Invert for true output
+
+# Check if enabled
+enabled = mux16.is_enabled()  # Returns True/False
 ```
+
+**Note**: Output is inverted (active-low), enable is active-low
 
 #### IC74151 - 8-to-1 Line Data Selector/Multiplexer
 
@@ -430,8 +456,8 @@ mux8.connect_power()
 # 8-bit data
 data = [1, 0, 1, 1, 0, 1, 0, 0]
 
-# Select input 3
-y_output, w_output = mux8.select_input(3, data)
+# Select input 3 with enable (active-low)
+y_output, w_output = mux8.select_input(3, data, enable=0)
 # Returns: (1, 0) - Y = data[3], W = NOT(data[3])
 
 # Function implementation using multiplexer
@@ -445,11 +471,14 @@ for a in [0, 1]:
             y, w = mux8.select_input(address, truth_table)
             print(f"f({a},{b},{c}) = {y}")
 
-# Data routing with enable
+# Data routing with strobe
 data_bus = [1, 0, 1, 0, 1, 1, 0, 1]
 select_lines = 5  # Binary 101
-y, w = mux8.select_input(select_lines, data_bus)
+y, w = mux8.route_data(select_lines, data_bus, strobe=0)  # Strobe enable
 print(f"Selected data: {y}, Inverted: {w}")
+
+# Get currently selected input number
+selected = mux8.get_selected_input()  # Returns 0-7 or None if disabled
 ```
 
 #### IC74153 - Dual 4-to-1 Line Data Selector/Multiplexer
@@ -484,9 +513,12 @@ operation_select = 1  # Select ALU result
 cpu_data, mem_data = dual_mux.select_input(operation_select, alu_result, memory_data)
 print(f"CPU gets: {cpu_data}, Memory interface: {mem_data}")
 
-# Independent enable control
+# Individual enable control
 outputs = dual_mux.multiplex_both(word1, word2, select=3, enable1=0, enable2=1)
-# MUX1 enabled, MUX2 disabled
+# MUX1 enabled, MUX2 disabled (returns [selected_value, 0])
+
+# Get current selections
+sel1, sel2 = dual_mux.get_selected_inputs()  # Returns selected input numbers
 ```
 
 #### IC74157 - Quad 2-to-1 Line Data Selector/Multiplexer
@@ -504,7 +536,7 @@ quad_mux.connect_power()
 bus_a = [1, 0, 1, 0]  # Bus A
 bus_b = [0, 1, 1, 1]  # Bus B
 
-# Select Bus A (select = 0)
+# Select Bus A (select = 0) with enable
 output = quad_mux.route_inputs(bus_a, bus_b, select=0, enable=0)
 # Returns: [1, 0, 1, 0] (Bus A selected)
 
@@ -517,11 +549,11 @@ cpu_bus = [1, 1, 0, 1]
 dma_bus = [0, 0, 1, 0]
 
 # CPU mode (DMA_REQUEST = 0)
-system_bus = quad_mux.route_inputs(cpu_bus, dma_bus, select=0, enable=0)
+system_bus = quad_mux.multiplex(cpu_bus, dma_bus, select=0, enable=0)
 print(f"CPU mode: System bus = {system_bus}")
 
 # DMA mode (DMA_REQUEST = 1)
-system_bus = quad_mux.route_inputs(cpu_bus, dma_bus, select=1, enable=0)
+system_bus = quad_mux.multiplex(cpu_bus, dma_bus, select=1, enable=0)
 print(f"DMA mode: System bus = {system_bus}")
 
 # Individual bus selection methods
@@ -530,6 +562,10 @@ selected_b = quad_mux.select_b_inputs(bus_b)  # Always select B inputs
 
 # Parallel switching with enable
 output = quad_mux.parallel_switch(bus_a, bus_b, select=1, enable=0)
+
+# Get current state
+is_a_selected = quad_mux.is_a_selected()  # Returns True if A inputs selected
+is_enabled = quad_mux.is_enabled()        # Returns True if IC is enabled
 ```
 
 ---
@@ -549,9 +585,6 @@ from IC.ic_7400 import IC7400
 from IC.ic_74138 import IC74138
 from IC.ic_74151 import IC74151
 
-# Or import from package
-from IC import create_ic
-
 # Create IC instances
 nand_gates = IC7400()
 decoder = IC74138()
@@ -562,30 +595,35 @@ nand_gates.connect_power()
 decoder.connect_power()
 multiplexer.connect_power()
 
-# Use the ICs
-result = nand_gates.gate_a(1, 0)
-outputs = decoder.decode(1, 0, 1, 0, 0, 1)
-mux_out = multiplexer.select_input(3, [1,0,1,1,0,1,0,0])
+# Use the ICs with correct method names
+result = nand_gates.gate_a(1, 0)                        # Individual gate method
+outputs = decoder.decode(1, 0, 1, 0, 0, 1)             # Main functionality method
+y_out, w_out = multiplexer.select_input(3, [1,0,1,1,0,1,0,0])  # Returns tuple
 ```
 
-### Factory Functions
+### Running Demonstrations
 
 ```python
-from IC import create_ic, list_ics
+# Run the comprehensive advanced IC demo
+python advanced_ic_demo.py
 
-# List all available ICs
-list_ics()
+# Run the IC test suite
+from IC.ic_test_suite import ICTestSuite
 
-# Create ICs using factory function
-ic1 = create_ic('7400')  # Creates IC7400
-ic2 = create_ic('74138')  # Creates IC74138
-ic3 = create_ic('74151')  # Creates IC74151
+# Create test suite instance
+suite = ICTestSuite()
 
-# All factory-created ICs are automatically powered
-result = ic1.gate_a(1, 0)  # Ready to use
+# Test all ICs
+all_passed = suite.test_all_ics()
+
+# Interactive mode
+suite.interactive_mode()
+
+# Demonstrate specific IC
+suite.demonstrate_ic('7400')
 ```
 
-### Testing ICs
+### Testing Individual ICs
 
 ```python
 # Test individual IC
@@ -603,6 +641,10 @@ for ic in ics:
     ic.connect_power()
     status = "PASS" if ic.test_ic() else "FAIL"
     print(f"{ic.__class__.__name__}: {status}")
+
+# Get truth table and pinout information
+print(ic.get_truth_table())
+print(ic.get_pinout_diagram())
 ```
 
 ---
@@ -611,32 +653,43 @@ for ic in ics:
 
 ### Logic Gate ICs
 
-| IC    | Function | Gates | Inputs | Package |
-|-------|----------|-------|---------|---------|
-| 7400  | NAND     | 4     | 2      | 14-pin  |
-| 7402  | NOR      | 4     | 2      | 14-pin  |
-| 7404  | NOT      | 6     | 1      | 14-pin  |
-| 7408  | AND      | 4     | 2      | 14-pin  |
-| 7410  | NAND     | 3     | 3      | 14-pin  |
-| 7420  | NAND     | 2     | 4      | 14-pin  |
-| 7430  | NAND     | 1     | 8      | 14-pin  |
-| 7432  | OR       | 4     | 2      | 14-pin  |
-| 7486  | XOR      | 4     | 2      | 14-pin  |
+| IC    | Function | Gates | Inputs | Package | Method Names |
+|-------|----------|-------|---------|---------|--------------|
+| 7400  | NAND     | 4     | 2      | 14-pin  | gate_a/b/c/d(a,b) |
+| 7402  | NOR      | 4     | 2      | 14-pin  | gate_a/b/c/d(a,b) |
+| 7404  | NOT      | 6     | 1      | 14-pin  | gate_a/b/c/d/e/f(a) |
+| 7408  | AND      | 4     | 2      | 14-pin  | gate_a/b/c/d(a,b) |
+| 7410  | NAND     | 3     | 3      | 14-pin  | gate_a/b/c(a,b,c) |
+| 7420  | NAND     | 2     | 4      | 14-pin  | gate_a/b(a,b,c,d) |
+| 7430  | NAND     | 1     | 8      | 14-pin  | gate(a,b,c,d,e,f,g,h) |
+| 7432  | OR       | 4     | 2      | 14-pin  | gate_a/b/c/d(a,b) |
+| 7486  | XOR      | 4     | 2      | 14-pin  | gate_a/b/c/d(a,b) |
 
 ### Advanced Data Processing ICs
 
-| IC     | Function | Inputs | Outputs | Package | Features |
-|--------|----------|--------|---------|---------|----------|
-| 74138  | 3-8 Decoder | 3 + 3E | 8 | 16-pin | Active-low outputs |
-| 74139  | Dual 2-4 Decoder | 2×(2+1E) | 2×4 | 16-pin | Independent decoders |
-| 74147  | 10-4 Encoder | 10 | 4 | 16-pin | Priority, BCD output |
-| 74148  | 8-3 Encoder | 8 + 1E | 3 + 2 | 16-pin | Cascade capability |
-| 74150  | 16-1 Mux | 16 + 4A + 1E | 1 | 24-pin | Inverted output |
-| 74151  | 8-1 Mux | 8 + 3A + 1E | 2 | 16-pin | Complementary outputs |
-| 74153  | Dual 4-1 Mux | 2×4 + 2A + 2E | 2 | 16-pin | Shared select lines |
-| 74157  | Quad 2-1 Mux | 2×4 + 1S + 1E | 4 | 16-pin | 4-bit bus switching |
+| IC     | Function | Method Names | Key Features |
+|--------|----------|--------------|--------------|
+| 74138  | 3-8 Decoder | decode(a2,a1,a0,e1,e2,e3) | Active-low outputs |
+| 74139  | Dual 2-4 Decoder | decode_1/2(a1,a0,enable) | Independent decoders |
+| 74147  | 10-4 Encoder | encode_decimal(inputs) | Priority, BCD output |
+| 74148  | 8-3 Encoder | encode_inputs(inputs,enable) | Cascade capability |
+| 74150  | 16-1 Mux | select_input(addr,data) | Inverted output |
+| 74151  | 8-1 Mux | select_input(addr,data,enable) | Complementary outputs |
+| 74153  | Dual 4-1 Mux | select_input(sel,data1,data2) | Shared select lines |
+| 74157  | Quad 2-1 Mux | route_inputs(a,b,sel,en) | 4-bit bus switching |
 
-**Legend**: A=Address, E=Enable, S=Select
+### Common Method Patterns
+
+**Logic Gates:**
+- `gate_a(input1, input2)` - Individual gate methods
+- `get_gate_output(gate_num, input1, input2)` - Generic gate access
+- `test_ic()` - Comprehensive testing
+- `get_truth_table()` - Generate truth table
+
+**Advanced ICs:**
+- Main function methods: `decode()`, `encode_decimal()`, `select_input()`
+- Helper methods: `get_selected_output()`, `is_enabled()`
+- Status methods: `is_any_input_active()`, `get_highest_priority_input()`
 
 ### Pin Numbering Convention
 
@@ -645,6 +698,17 @@ All ICs follow standard DIP (Dual In-line Package) pinout:
 - **16-pin**: Pins 1-8 (left side), 9-16 (right side)  
 - **24-pin**: Pins 1-12 (left side), 13-24 (right side)
 - **Power**: VCC (top-right), GND (bottom-left)
+
+### Active-Low Signals
+
+Many 7400 series ICs use active-low signaling:
+- **74138**: All outputs are active-low (0 = selected)
+- **74139**: All outputs are active-low (0 = selected)
+- **74147**: Inputs and outputs are active-low (0 = active)
+- **74148**: Inputs and outputs are active-low (0 = active)
+- **74150**: Enable is active-low, output is inverted
+- **74151**: Enable is active-low
+- **74157**: Enable is active-low
 
 ---
 
@@ -670,41 +734,30 @@ class Simple4BitALU:
             ic.connect_power()
     
     def compute(self, a, b, operation):
-        # operation: 0=AND, 1=OR, 2=XOR, 3=NAND
-        
-        # Compute all operations
-        and_result = []
-        or_result = []
-        xor_result = []
-        nand_result = []
+        """
+        operation: 0=AND, 1=OR, 2=XOR, 3=NAND
+        """
+        results = []
         
         for i in range(4):
-            # AND: double NAND
+            # AND: double NAND (NAND the result of NAND)
             nand1 = self.nand_gates.gate_a(a[i], b[i])
             and_bit = self.nand_gates.gate_b(nand1, nand1)
-            and_result.append(and_bit)
             
-            # OR
+            # OR: direct operation
             or_bit = self.or_gates.gate_a(a[i], b[i])
-            or_result.append(or_bit)
             
-            # XOR
+            # XOR: direct operation
             xor_bit = self.xor_gates.gate_a(a[i], b[i])
-            xor_result.append(xor_bit)
             
-            # NAND
+            # NAND: direct operation
             nand_bit = self.nand_gates.gate_c(a[i], b[i])
-            nand_result.append(nand_bit)
+            
+            # Store all operation results
+            ops = [and_bit, or_bit, xor_bit, nand_bit]
+            results.append(ops[operation])
         
-        # Select operation using multiplexers
-        if operation == 0:
-            return and_result
-        elif operation == 1:
-            return or_result
-        elif operation == 2:
-            return xor_result
-        else:
-            return nand_result
+        return results
 
 # Usage
 alu = Simple4BitALU()
@@ -712,6 +765,8 @@ a = [1, 0, 1, 1]  # 4-bit input A
 b = [0, 1, 1, 0]  # 4-bit input B
 
 result = alu.compute(a, b, operation=2)  # XOR operation
+print(f"A = {a}")
+print(f"B = {b}")
 print(f"A XOR B = {result}")
 ```
 
@@ -731,7 +786,7 @@ class MemoryDecoder:
         
         self.memory_map = {
             0: "System ROM",
-            1: "User RAM",
+            1: "User RAM", 
             2: "Video RAM",
             3: "I/O Ports",
             4: "Expansion 1",
@@ -741,8 +796,9 @@ class MemoryDecoder:
         }
     
     def decode_address(self, address):
-        # address is 6-bit: AAAAAA (A5 A4 A3 A2 A1 A0)
-        
+        """
+        Decode 6-bit address: AAAAAA (A5 A4 A3 A2 A1 A0)
+        """
         # Main decoder uses A5, A4, A3
         main_addr = (address >> 3) & 0x7
         a2 = (main_addr >> 2) & 1
@@ -750,7 +806,7 @@ class MemoryDecoder:
         a0 = main_addr & 1
         
         main_outputs = self.main_decoder.decode(a2, a1, a0, e1=0, e2=0, e3=1)
-        main_select = main_outputs.index(0)
+        main_select = main_outputs.index(0)  # Find active output
         
         # Sub decoder uses A2, A1
         sub_addr = (address >> 1) & 0x3
@@ -758,21 +814,23 @@ class MemoryDecoder:
         s0 = sub_addr & 1
         
         sub_outputs = self.sub_decoder.decode_1(s1, s0, enable=0)
-        sub_select = sub_outputs.index(0)
+        sub_select = sub_outputs.index(0)  # Find active output
         
         return {
             'main_block': main_select,
             'main_name': self.memory_map[main_select],
             'sub_block': sub_select,
-            'byte_select': address & 1
+            'byte_select': address & 1,
+            'full_address': f"0x{address:02X}"
         }
 
 # Usage
 decoder = MemoryDecoder()
 
-for addr in [0x00, 0x0F, 0x1A, 0x2C, 0x3F]:
+test_addresses = [0x00, 0x0F, 0x1A, 0x2C, 0x3F]
+for addr in test_addresses:
     result = decoder.decode_address(addr)
-    print(f"Address 0x{addr:02X}: {result['main_name']}, "
+    print(f"Address {result['full_address']}: {result['main_name']}, "
           f"Sub-block {result['sub_block']}, "
           f"Byte {result['byte_select']}")
 ```
@@ -797,82 +855,199 @@ class InterruptController:
             "Disk Drive",  # IRQ6
             "NMI"          # IRQ7 (highest priority)
         ]
-        
-        self.irq_handlers = {
-            0: self.timer_handler,
-            1: self.keyboard_handler,
-            2: self.serial_handler,
-            3: self.network_handler,
-            4: self.mouse_handler,
-            5: self.sound_handler,
-            6: self.disk_handler,
-            7: self.nmi_handler
-        }
     
     def check_interrupts(self, irq_lines):
         """
         Check for active interrupts and return highest priority
         irq_lines: dict with IRQ number as key, state as value
-        (0 = active interrupt, 1 = no interrupt)
+        (0 = active interrupt, 1 = no interrupt) - active low
         """
         a2, a1, a0, gs, eo = self.encoder.encode_inputs(irq_lines, enable_input=0)
         
-        if gs == 0:  # Valid interrupt present
+        if gs == 0:  # Group select active (valid interrupt present)
             # Convert inverted output to IRQ number
             irq_number = (1-a2)*4 + (1-a1)*2 + (1-a0)*1
-            return irq_number
+            return irq_number, self.irq_names[irq_number]
         else:
-            return None  # No interrupts
+            return None, "No interrupts"
     
-    def handle_interrupt(self, irq_lines):
-        irq = self.check_interrupts(irq_lines)
-        if irq is not None:
-            print(f"Handling {self.irq_names[irq]} (IRQ{irq})")
-            self.irq_handlers[irq]()
-            return irq
-        return None
-    
-    def timer_handler(self):
-        print("Timer interrupt: System tick")
-    
-    def keyboard_handler(self):
-        print("Keyboard interrupt: Key pressed")
-    
-    def serial_handler(self):
-        print("Serial interrupt: Data received")
-    
-    def network_handler(self):
-        print("Network interrupt: Packet arrived")
-    
-    def mouse_handler(self):
-        print("Mouse interrupt: Movement detected")
-    
-    def sound_handler(self):
-        print("Sound interrupt: Buffer empty")
-    
-    def disk_handler(self):
-        print("Disk interrupt: Operation complete")
-    
-    def nmi_handler(self):
-        print("NMI: Critical system error!")
+    def handle_interrupt_scenario(self, scenario_name, irq_lines):
+        irq_num, irq_name = self.check_interrupts(irq_lines)
+        if irq_num is not None:
+            print(f"{scenario_name}: Handling {irq_name} (IRQ{irq_num})")
+        else:
+            print(f"{scenario_name}: {irq_name}")
+        return irq_num
 
 # Usage
 controller = InterruptController()
 
-# Simulate various interrupt scenarios
+# Simulate various interrupt scenarios (0 = interrupt active, 1 = inactive)
 scenarios = [
-    {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1},  # No interrupts
-    {0: 0, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1},  # Timer only
-    {0: 0, 1: 0, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1},  # Timer + Keyboard
-    {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0},  # All interrupts
-    {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 0},  # NMI only
+    ("No interrupts", {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1}),
+    ("Timer only", {0: 0, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1}),
+    ("Timer + Keyboard", {0: 0, 1: 0, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1}),
+    ("Multiple IRQs", {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}),
+    ("NMI only", {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 0}),
 ]
 
-for i, scenario in enumerate(scenarios):
-    print(f"\nScenario {i+1}:")
-    irq = controller.handle_interrupt(scenario)
-    if irq is None:
-        print("No interrupts to handle")
+print("Interrupt Priority Controller Demo:")
+print("=" * 40)
+for scenario_name, irq_pattern in scenarios:
+    controller.handle_interrupt_scenario(scenario_name, irq_pattern)
+```
+
+### Data Routing System
+
+```python
+from IC.ic_74151 import IC74151
+from IC.ic_74153 import IC74153
+from IC.ic_74157 import IC74157
+
+class DataRouter:
+    def __init__(self):
+        self.mux8 = IC74151()    # 8-to-1 multiplexer
+        self.dual_mux = IC74153() # Dual 4-to-1 multiplexer
+        self.quad_mux = IC74157() # Quad 2-to-1 multiplexer
+        
+        # Power up all ICs
+        for ic in [self.mux8, self.dual_mux, self.quad_mux]:
+            ic.connect_power()
+    
+    def route_8_channels(self, data_sources, channel_select):
+        """Route one of 8 data sources to output"""
+        y, w = self.mux8.select_input(channel_select, data_sources, enable=0)
+        return y, w  # y = selected data, w = inverted
+    
+    def route_dual_4_channels(self, data1, data2, select):
+        """Route parallel 4-bit data streams"""
+        return self.dual_mux.select_input(select, data1, data2)
+    
+    def switch_buses(self, bus_a, bus_b, select_b):
+        """Switch between two 4-bit buses"""
+        return self.quad_mux.route_inputs(bus_a, bus_b, select=select_b, enable=0)
+
+# Usage
+router = DataRouter()
+
+# Example 1: CPU data source selection
+print("Example 1: CPU Data Source Selection")
+print("=" * 35)
+data_sources = [0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0]
+source_names = ["Register A", "Register B", "Memory", "ALU", "Immediate", "Stack", "I/O", "Cache"]
+
+for i in range(8):
+    selected, inverted = router.route_8_channels(data_sources, i)
+    print(f"Select {i} ({source_names[i]}): Data=0x{data_sources[i]:02X}, Output={selected}")
+
+# Example 2: Parallel data processing
+print("\nExample 2: Parallel Data Processing")
+print("=" * 35)
+stream1 = [1, 0, 1, 1]  # First data stream
+stream2 = [0, 1, 0, 1]  # Second data stream
+
+for sel in range(4):
+    out1, out2 = router.route_dual_4_channels(stream1, stream2, sel)
+    print(f"Select {sel}: Stream1[{sel}]={out1}, Stream2[{sel}]={out2}")
+
+# Example 3: Bus switching (CPU vs DMA)
+print("\nExample 3: Bus Switching (CPU vs DMA)")
+print("=" * 35)
+cpu_bus = [1, 1, 0, 1]   # CPU data bus
+dma_bus = [0, 0, 1, 0]   # DMA data bus
+
+print("CPU mode (select=0):", router.switch_buses(cpu_bus, dma_bus, select_b=0))
+print("DMA mode (select=1):", router.switch_buses(cpu_bus, dma_bus, select_b=1))
+```
+
+### Function Generator Using Multiplexers
+
+```python
+from IC.ic_74150 import IC74150
+
+class FunctionGenerator:
+    def __init__(self):
+        self.mux = IC74150()
+        self.mux.connect_power()
+    
+    def generate_waveform(self, lookup_table, phase):
+        """Generate waveform using 16-point lookup table"""
+        return self.mux.select_input(phase, lookup_table)
+    
+    def create_sine_wave(self, steps=16):
+        """Create approximated sine wave lookup table"""
+        import math
+        sine_table = []
+        for i in range(steps):
+            angle = 2 * math.pi * i / steps
+            value = 1 if math.sin(angle) >= 0 else 0
+            sine_table.append(value)
+        return sine_table
+    
+    def create_triangle_wave(self, steps=16):
+        """Create triangle wave lookup table"""
+        triangle = []
+        half = steps // 2
+        for i in range(steps):
+            if i < half:
+                value = 1 if i % 2 == 0 else 0
+            else:
+                value = 1 if (steps - i) % 2 == 0 else 0
+            triangle.append(value)
+        return triangle
+
+# Usage
+generator = FunctionGenerator()
+
+# Generate different waveforms
+print("Function Generator Demo")
+print("=" * 25)
+
+# Sine wave approximation
+sine_table = [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0]
+print("Sine Wave (16 steps):")
+for phase in range(16):
+    output = generator.generate_waveform(sine_table, phase)
+    # Note: 74150 output is inverted
+    actual_value = 1 - output
+    print(f"Phase {phase:2d}: {actual_value}")
+
+# Square wave
+square_table = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+print("\nSquare Wave (50% duty cycle):")
+for phase in range(0, 16, 2):  # Sample every other phase
+    output = generator.generate_waveform(square_table, phase)
+    actual_value = 1 - output  # Invert for true output
+    print(f"Phase {phase:2d}: {actual_value}")
+```
+
+### Running the Complete Demo
+
+```python
+# To run the comprehensive demonstration
+if __name__ == "__main__":
+    print("🔌 7400 SERIES IC LIBRARY DEMONSTRATION")
+    print("=" * 50)
+    
+    # Import the main demo
+    import advanced_ic_demo
+    
+    # Run the complete demonstration
+    advanced_ic_demo.main()
+    
+    # Or run individual components
+    print("\n" + "="*50)
+    print("INDIVIDUAL COMPONENT TESTS")
+    print("="*50)
+    
+    # Test basic gates
+    from IC.ic_test_suite import ICTestSuite
+    suite = ICTestSuite()
+    suite.test_all_ics()
+    
+    # Interactive mode
+    print("\nEntering interactive mode...")
+    suite.interactive_mode()
 ```
 
 ---
@@ -894,7 +1069,7 @@ def create_16bit_decoder():
     
     return high_decoder, low_decoder
 
-# Expandable priority encoder using 74148s
+# Expandable priority encoder using 74148s  
 def create_16input_encoder():
     high_encoder = IC74148()  # IRQ15-IRQ8
     low_encoder = IC74148()   # IRQ7-IRQ0
@@ -906,42 +1081,36 @@ def create_16input_encoder():
     return high_encoder, low_encoder
 ```
 
-### Timing Considerations
+### Real-World Applications
+
+The ICs in this library are used in:
+
+- **74138/74139**: Memory address decoding, chip select logic
+- **74147/74148**: Keyboard encoders, interrupt controllers
+- **74150/74151**: ROM/EPROM emulation, function generators
+- **74153/74157**: Bus multiplexing, data path switching
+- **Basic Gates**: Building blocks for custom logic circuits
+
+### Testing and Validation
 
 ```python
-# Propagation delay simulation
-class TimedIC74151(IC74151):
-    def __init__(self):
-        super().__init__()
-        self.propagation_delay = 13e-9  # 13ns typical
+# Run comprehensive testing
+from IC.ic_test_suite import ICTestSuite
+
+suite = ICTestSuite()
+
+# Test all ICs
+if suite.test_all_ics():
+    print("All ICs passed testing!")
     
-    def select_input(self, address, data, simulate_delay=True):
-        if simulate_delay:
-            import time
-            time.sleep(self.propagation_delay)
-        
-        return super().select_input(address, data)
-```
+# Test specific IC families
+suite.compare_logic_families()
 
-### Error Handling
+# Interactive testing
+suite.interactive_mode()
 
-```python
-# Robust IC usage with error handling
-def safe_ic_operation():
-    try:
-        ic = IC74138()
-        ic.connect_power()
-        
-        if not ic.test_ic():
-            raise RuntimeError("IC failed self-test")
-        
-        # Use IC safely
-        result = ic.decode(1, 0, 1, 0, 0, 1)
-        return result
-        
-    except Exception as e:
-        print(f"IC operation failed: {e}")
-        return None
+# Individual IC demonstration
+suite.demonstrate_ic('74138')
 ```
 
 ---
@@ -957,7 +1126,37 @@ To add new ICs to the library:
 5. Include usage examples
 6. Update this README
 
----
+## Dependencies
+
+- Python 3.6+
+- Standard library only (no external dependencies)
+
+## Package Structure
+
+```
+IC/
+├── __init__.py              # Package initialization
+├── base_ic.py              # Base IC class with common functionality
+├── ic_7400.py              # 7400 - Quad 2-Input NAND
+├── ic_7402.py              # 7402 - Quad 2-Input NOR
+├── ic_7404.py              # 7404 - Hex Inverter
+├── ic_7408.py              # 7408 - Quad 2-Input AND
+├── ic_7410.py              # 7410 - Triple 3-Input NAND
+├── ic_7420.py              # 7420 - Dual 4-Input NAND
+├── ic_7430.py              # 7430 - Single 8-Input NAND
+├── ic_7432.py              # 7432 - Quad 2-Input OR
+├── ic_7486.py              # 7486 - Quad 2-Input XOR
+├── ic_74138.py             # 74138 - 3-to-8 Decoder
+├── ic_74139.py             # 74139 - Dual 2-to-4 Decoder
+├── ic_74147.py             # 74147 - 10-to-4 Priority Encoder
+├── ic_74148.py             # 74148 - 8-to-3 Priority Encoder
+├── ic_74150.py             # 74150 - 16-to-1 Multiplexer
+├── ic_74151.py             # 74151 - 8-to-1 Multiplexer
+├── ic_74153.py             # 74153 - Dual 4-to-1 Multiplexer
+├── ic_74157.py             # 74157 - Quad 2-to-1 Multiplexer
+├── ic_test_suite.py        # Comprehensive testing and demo suite
+└── README.md               # This file
+```
 
 ## License
 
@@ -965,201 +1164,13 @@ This library is provided for educational purposes. All 7400-series IC specificat
 
 ---
 
-*For more examples and advanced usage, see the `advanced_ic_demo.py` file in the project root.*
-print(ic.get_truth_table())
-```
-
-## Package Structure
-
-```
-IC/
-├── __init__.py              # Package initialization and factory functions
-├── base_ic.py              # Base IC class with common functionality
-├── ic_7400.py              # 7400 - Quad 2-Input NAND
-├── ic_7402.py              # 7402 - Quad 2-Input NOR
-├── ic_7404.py              # 7404 - Hex Inverter
-├── ic_7408.py              # 7408 - Quad 2-Input AND
-├── ic_7432.py              # 7432 - Quad 2-Input OR
-├── ic_7486.py              # 7486 - Quad 2-Input XOR
-├── ic_7410.py              # 7410 - Triple 3-Input NAND
-├── ic_7420.py              # 7420 - Dual 4-Input NAND
-├── ic_7430.py              # 7430 - Single 8-Input NAND
-├── ic_test_suite.py        # Comprehensive testing and demo suite
-└── README.md               # This file
-```
-
-## Features
-
-### Realistic IC Behavior
-- Proper pin numbering (1-14 for DIP-14 packages)
-- Power pins (VCC and GND)
-- Pin state management
-- Power-off behavior (outputs go to 0)
-
-### Testing and Validation
-- Automated truth table verification
-- Interactive testing modes
-- Comprehensive test suites
-- Error detection and reporting
-
-### Educational Tools
-- ASCII pinout diagrams
-- Truth table generation
-- Logic family comparisons
-- Digital circuit examples
-
-## Usage Examples
-
-### Basic IC Operations
-
-```python
-from IC import get_ic
-
-# Factory function to create any IC
-nand_ic = get_ic('7400')
-and_ic = get_ic('7408')
-not_ic = get_ic('7404')
-
-# Power the ICs
-for ic in [nand_ic, and_ic, not_ic]:
-    ic.connect_power()
-
-# Use the gates
-nand_output = nand_ic.get_gate_output(1, 1, 1)  # 1 NAND 1 = 0
-and_output = and_ic.get_gate_output(1, 1, 1)    # 1 AND 1 = 1
-not_output = not_ic.get_gate_output(1, 1)       # NOT 1 = 0
-```
-
-### Building Digital Circuits
-
-```python
-from IC.ic_7486 import IC7486  # XOR gates
-from IC.ic_7408 import IC7408  # AND gates
-
-# Half Adder Implementation
-xor_ic = IC7486()  # For sum output
-and_ic = IC7408()  # For carry output
-
-xor_ic.connect_power()
-and_ic.connect_power()
-
-def half_adder(a, b):
-    sum_bit = xor_ic.get_gate_output(1, a, b)    # A XOR B
-    carry_bit = and_ic.get_gate_output(1, a, b)  # A AND B
-    return sum_bit, carry_bit
-
-# Test the half adder
-for a in [0, 1]:
-    for b in [0, 1]:
-        s, c = half_adder(a, b)
-        print(f"{a} + {b} = {s} (carry: {c})")
-```
-
-### Interactive Testing
-
-```python
-from IC.ic_test_suite import ICTestSuite
-
-# Create test suite
-suite = ICTestSuite()
-
-# Test all ICs
-suite.test_all_ics()
-
-# Interactive mode
-suite.interactive_mode()
-
-# Demonstrate specific IC
-suite.demonstrate_ic('7400')
-```
-
-## Pin Configurations
-
-Each IC follows standard DIP-14 pinout conventions:
-
-### 7400 (Quad NAND) Example
-```
-    7400 (DIP-14) - Quad 2-Input NAND Gates
-====================================================
-
- 1 ┤1A (Gate 1 In A)├─────────┤VCC (Power)     ├ 14
- 2 ┤1B (Gate 1 In B)├─────────┤4B (Gate 4 In B)├ 13
- 3 ┤1Y (Gate 1 Out) ├─────────┤4A (Gate 4 In A)├ 12
- 4 ┤2A (Gate 2 In A)├─────────┤4Y (Gate 4 Out) ├ 11
- 5 ┤2B (Gate 2 In B)├─────────┤3B (Gate 3 In B)├ 10
- 6 ┤2Y (Gate 2 Out) ├─────────┤3A (Gate 3 In A)├  9
- 7 ┤GND (Ground)    ├─────────┤3Y (Gate 3 Out) ├  8
-```
-
-## API Reference
-
-### BaseIC Class
-
-All ICs inherit from `BaseIC` which provides:
-
-- `connect_power(vcc=1, gnd=0)` - Connect power to the IC
-- `set_pin(pin_number, value)` - Set a pin to logic level
-- `get_pin(pin_number)` - Get current pin logic level
-- `is_powered()` - Check if IC is powered
-- `get_pinout_diagram()` - Generate ASCII pinout diagram
-- `test_ic()` - Run comprehensive tests
-- `reset_pins()` - Reset all pins to disconnected state
-
-### Gate-Specific Methods
-
-Each IC also provides:
-
-- `get_gate_output(gate_number, *inputs)` - Calculate gate output
-- `get_truth_table()` - Generate truth table
-- `update_outputs()` - Refresh all output pins
-
-## Testing
-
-Run the comprehensive test suite:
-
-```python
-from IC.ic_test_suite import ICTestSuite
-
-suite = ICTestSuite()
-all_passed = suite.test_all_ics()
-
-if all_passed:
-    print("All ICs passed testing!")
-else:
-    print("Some ICs failed - check the detailed results")
-```
-
-## Educational Applications
-
-This package is ideal for:
-
-- Digital logic education
-- Circuit simulation
-- Understanding TTL IC behavior
-- Learning object-oriented design
-- Exploring digital electronics concepts
-
-## Dependencies
-
-- Python 3.6+
-- Standard library only (no external dependencies)
-
-## Contributing
-
-The modular design makes it easy to add new ICs:
-
-1. Inherit from `BaseIC`
-2. Define pin mappings
-3. Implement gate logic
-4. Add to the IC catalog
-5. Write tests
-
-## License
-
-Educational use - part of Digital Logic Design library.
-
 ## See Also
 
-- `../basic_gates/` - Individual logic gate implementations
-- `../FLIP_FLOPS/` - Sequential circuit implementations  
-- `../INPUTS/` - Signal source implementations
+- **`advanced_ic_demo.py`** - Comprehensive demonstration of all advanced ICs
+- **`../basic_gates/`** - Individual logic gate implementations
+- **`../FLIP_FLOPS/`** - Sequential circuit implementations  
+- **`../INPUTS/`** - Signal source implementations
+
+---
+
+*For the most up-to-date examples and advanced usage, run `python advanced_ic_demo.py` in the project root or use the interactive test suite.*
