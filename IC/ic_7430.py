@@ -12,7 +12,7 @@ Pin Configuration (DIP-14):
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'basic_gates'))
-from base_ic import BaseIC
+from .base_ic import BaseIC
 from NAND import NANDGate
 
 class IC7430(BaseIC):

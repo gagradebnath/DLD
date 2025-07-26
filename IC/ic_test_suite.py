@@ -10,15 +10,15 @@ import sys
 import os
 
 # Import all IC classes
-from ic_7400 import IC7400
-from ic_7402 import IC7402
-from ic_7404 import IC7404
-from ic_7408 import IC7408
-from ic_7432 import IC7432
-from ic_7486 import IC7486
-from ic_7410 import IC7410
-from ic_7420 import IC7420
-from ic_7430 import IC7430
+from .ic_7400 import IC7400
+from .ic_7402 import IC7402
+from .ic_7404 import IC7404
+from .ic_7408 import IC7408
+from .ic_7432 import IC7432
+from .ic_7486 import IC7486
+from .ic_7410 import IC7410
+from .ic_7420 import IC7420
+from .ic_7430 import IC7430
 
 class ICTestSuite:
     """
