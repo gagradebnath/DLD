@@ -36,6 +36,80 @@ The library contains **17 integrated circuits** organized into four categories:
 
 ---
 
+
+## API Reference
+
+### BaseIC Class
+
+All ICs inherit from `BaseIC` which provides:
+
+- `connect_power(vcc=1, gnd=0)` - Connect power to the IC
+- `set_pin(pin_number, value)` - Set a pin to logic level
+- `get_pin(pin_number)` - Get current pin logic level
+- `is_powered()` - Check if IC is powered
+- `get_pinout_diagram()` - Generate ASCII pinout diagram
+- `test_ic()` - Run comprehensive tests
+- `reset_pins()` - Reset all pins to disconnected state
+
+### Gate-Specific Methods
+
+Each IC also provides:
+
+- `get_gate_output(gate_number, *inputs)` - Calculate gate output
+- `get_truth_table()` - Generate truth table
+- `update_outputs()` - Refresh all output pins
+
+## Testing
+
+Run the comprehensive test suite:
+
+```python
+from IC.ic_test_suite import ICTestSuite
+
+suite = ICTestSuite()
+all_passed = suite.test_all_ics()
+
+if all_passed:
+    print("All ICs passed testing!")
+else:
+    print("Some ICs failed - check the detailed results")
+```
+
+## Educational Applications
+
+This package is ideal for:
+
+- Digital logic education
+- Circuit simulation
+- Understanding TTL IC behavior
+- Learning object-oriented design
+- Exploring digital electronics concepts
+
+## Dependencies
+
+- Python 3.6+
+- Standard library only (no external dependencies)
+
+## Contributing
+
+The modular design makes it easy to add new ICs:
+
+1. Inherit from `BaseIC`
+2. Define pin mappings
+3. Implement gate logic
+4. Add to the IC catalog
+5. Write tests
+
+## License
+
+Educational use - part of Digital Logic Design library.
+
+## See Also
+
+- `../basic_gates/` - Individual logic gate implementations
+- `../FLIP_FLOPS/` - Sequential circuit implementations  
+- `../INPUTS/` - Signal source implementations
+---
 ## Basic Logic Gates
 
 ### IC7400 - Quad 2-Input NAND Gate
@@ -1090,76 +1164,3 @@ Each IC follows standard DIP-14 pinout conventions:
  6 ┤2Y (Gate 2 Out) ├─────────┤3A (Gate 3 In A)├  9
  7 ┤GND (Ground)    ├─────────┤3Y (Gate 3 Out) ├  8
 ```
-
-## API Reference
-
-### BaseIC Class
-
-All ICs inherit from `BaseIC` which provides:
-
-- `connect_power(vcc=1, gnd=0)` - Connect power to the IC
-- `set_pin(pin_number, value)` - Set a pin to logic level
-- `get_pin(pin_number)` - Get current pin logic level
-- `is_powered()` - Check if IC is powered
-- `get_pinout_diagram()` - Generate ASCII pinout diagram
-- `test_ic()` - Run comprehensive tests
-- `reset_pins()` - Reset all pins to disconnected state
-
-### Gate-Specific Methods
-
-Each IC also provides:
-
-- `get_gate_output(gate_number, *inputs)` - Calculate gate output
-- `get_truth_table()` - Generate truth table
-- `update_outputs()` - Refresh all output pins
-
-## Testing
-
-Run the comprehensive test suite:
-
-```python
-from IC.ic_test_suite import ICTestSuite
-
-suite = ICTestSuite()
-all_passed = suite.test_all_ics()
-
-if all_passed:
-    print("All ICs passed testing!")
-else:
-    print("Some ICs failed - check the detailed results")
-```
-
-## Educational Applications
-
-This package is ideal for:
-
-- Digital logic education
-- Circuit simulation
-- Understanding TTL IC behavior
-- Learning object-oriented design
-- Exploring digital electronics concepts
-
-## Dependencies
-
-- Python 3.6+
-- Standard library only (no external dependencies)
-
-## Contributing
-
-The modular design makes it easy to add new ICs:
-
-1. Inherit from `BaseIC`
-2. Define pin mappings
-3. Implement gate logic
-4. Add to the IC catalog
-5. Write tests
-
-## License
-
-Educational use - part of Digital Logic Design library.
-
-## See Also
-
-- `../basic_gates/` - Individual logic gate implementations
-- `../FLIP_FLOPS/` - Sequential circuit implementations  
-- `../INPUTS/` - Signal source implementations
