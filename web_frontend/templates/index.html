@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Logic Design IC Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microchip me-2"></i>
+                DLD IC Library
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/simulator"><i class="fas fa-play"></i> Simulator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/circuit_designer"><i class="fas fa-drafting-compass"></i> Designer</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="jumbotron bg-gradient-primary text-white p-5 rounded mb-4">
+                    <h1 class="display-4">
+                        <i class="fas fa-microchip me-3"></i>
+                        Digital Logic Design IC Library
+                    </h1>
+                    <p class="lead">Interactive 7400-Series TTL Integrated Circuits Simulation Platform</p>
+                    <hr class="my-4">
+                    <p>Explore, simulate, and design with authentic TTL IC behavior including logic gates, decoders, encoders, and multiplexers.</p>
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <a class="btn btn-light btn-lg w-100 mb-2" href="/simulator">
+                                <i class="fas fa-play me-2"></i>IC Simulator
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a class="btn btn-outline-light btn-lg w-100 mb-2" href="/circuit_designer">
+                                <i class="fas fa-drafting-compass me-2"></i>Circuit Designer
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-light btn-lg w-100 mb-2" onclick="showStats()">
+                                <i class="fas fa-chart-bar me-2"></i>Library Stats
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for category, ics in ic_categories.items() %}
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 shadow">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-{{ 'logic' if 'Logic' in category else 'code' if 'Encoder' in category else 'filter' if 'Decoder' in category else 'random' }} me-2"></i>
+                            {{ category }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for ic in ics %}
+                            <div class="col-md-6 mb-3">
+                                <div class="ic-card border rounded p-3 h-100" onclick="showICDetails('{{ ic }}')">
+                                    <div class="text-center">
+                                        <div class="ic-chip mb-2">
+                                            <i class="fas fa-microchip fa-2x text-primary"></i>
+                                        </div>
+                                        <h6 class="fw-bold">{{ ic }}</h6>
+                                        <small class="text-muted">{{ ic_classes[ic].__doc__.split('\n')[0] if ic_classes[ic].__doc__ else 'TTL IC' }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Quick Start Guide
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="text-center p-3">
+                                    <i class="fas fa-mouse-pointer fa-3x text-primary mb-3"></i>
+                                    <h6>1. Select IC</h6>
+                                    <p class="text-muted">Click on any IC above to view details and specifications</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center p-3">
+                                    <i class="fas fa-play-circle fa-3x text-success mb-3"></i>
+                                    <h6>2. Simulate</h6>
+                                    <p class="text-muted">Use the simulator to test IC functionality with real-time inputs</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center p-3">
+                                    <i class="fas fa-project-diagram fa-3x text-warning mb-3"></i>
+                                    <h6>3. Design</h6>
+                                    <p class="text-muted">Build complex circuits by connecting multiple ICs together</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IC Details Modal -->
+    <div class="modal fade" id="icDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="icModalTitle">
+                        <i class="fas fa-microchip me-2"></i>IC Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="icModalBody">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="simulateCurrentIC()">
+                        <i class="fas fa-play me-2"></i>Simulate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div class="modal fade" id="statsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-chart-bar me-2"></i>Library Statistics
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border rounded p-3 mb-3">
+                                <h2 class="text-primary">{{ ic_categories['Logic Gates']|length }}</h2>
+                                <small>Logic Gates</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3 mb-3">
+                                <h2 class="text-success">{{ ic_categories['Decoders']|length + ic_categories['Encoders']|length }}</h2>
+                                <small>Encoders/Decoders</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3 mb-3">
+                                <h2 class="text-warning">{{ ic_categories['Multiplexers']|length }}</h2>
+                                <small>Multiplexers</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3 mb-3">
+                                <h2 class="text-info">{{ (ic_categories.values() | list | sum | length) }}</h2>
+                                <small>Total ICs</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

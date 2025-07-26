@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IC Simulator - DLD Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microchip me-2"></i>
+                DLD IC Library
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                <a class="nav-link active" href="/simulator"><i class="fas fa-play"></i> Simulator</a>
+                <a class="nav-link" href="/circuit_designer"><i class="fas fa-drafting-compass"></i> Designer</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-plus-circle me-2"></i>Add IC
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% for category, ics in ic_categories.items() %}
+                        <div class="mb-3">
+                            <h6 class="text-secondary">{{ category }}</h6>
+                            <div class="row">
+                                {% for ic in ics %}
+                                <div class="col-6 mb-2">
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="addIC('{{ ic }}')">
+                                        {{ ic }}
+                                    </button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="card shadow mt-3">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cog me-2"></i>Simulation Controls
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <button class="btn btn-success w-100 mb-2" onclick="runAllTests()">
+                                <i class="fas fa-check-circle me-2"></i>Test All ICs
+                            </button>
+                            <button class="btn btn-warning w-100 mb-2" onclick="clearWorkspace()">
+                                <i class="fas fa-trash me-2"></i>Clear Workspace
+                            </button>
+                            <button class="btn btn-info w-100" onclick="exportResults()">
+                                <i class="fas fa-download me-2"></i>Export Results
+                            </button>
+                        </div>
+                        <div id="connectionStatus" class="alert alert-secondary">
+                            <i class="fas fa-spinner fa-spin me-2"></i>Connecting...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-desktop me-2"></i>Simulation Workspace
+                        </h5>
+                        <div>
+                            <button class="btn btn-outline-light btn-sm" onclick="toggleFullscreen()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" style="min-height: 600px;">
+                        <div id="workspace" class="position-relative h-100">
+                            <div id="welcome-message" class="text-center text-muted mt-5">
+                                <i class="fas fa-microchip fa-4x mb-3"></i>
+                                <h4>Welcome to IC Simulator</h4>
+                                <p>Select an IC from the left panel to start simulating</p>
+                                <div class="mt-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="p-3 border rounded">
+                                                <i class="fas fa-mouse-pointer fa-2x text-primary mb-2"></i>
+                                                <h6>Click & Drag</h6>
+                                                <small>Drag ICs around the workspace</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="p-3 border rounded">
+                                                <i class="fas fa-link fa-2x text-success mb-2"></i>
+                                                <h6>Connect Pins</h6>
+                                                <small>Click pins to create connections</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="p-3 border rounded">
+                                                <i class="fas fa-play fa-2x text-warning mb-2"></i>
+                                                <h6>Real-time</h6>
+                                                <small>See results instantly</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-list me-2"></i>Simulation Log
+                                </h6>
+                            </div>
+                            <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+                                <div id="simulationLog" class="font-monospace small">
+                                    <div class="text-muted">Simulation log will appear here...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-header bg-warning text-dark">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-chart-line me-2"></i>Performance Monitor
+                                </h6>
+                            </div>
+                            <div class="card-body p-2">
+                                <div id="performanceMonitor">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="small text-muted">Active ICs</div>
+                                            <div id="activeICCount" class="fw-bold">0</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="small text-muted">Connections</div>
+                                            <div id="connectionCount" class="fw-bold">0</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="small text-muted">Operations/sec</div>
+                                            <div id="operationsPerSec" class="fw-bold">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IC Configuration Modal -->
+    <div class="modal fade" id="icConfigModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="configModalTitle">
+                        <i class="fas fa-cog me-2"></i>IC Configuration
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="configModalBody">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="applyICConfig()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="/static/js/simulator.js"></script>
+</body>
+</html>

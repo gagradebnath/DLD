@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuit Designer - DLD Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microchip me-2"></i>
+                DLD IC Library
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                <a class="nav-link" href="/simulator"><i class="fas fa-play"></i> Simulator</a>
+                <a class="nav-link active" href="/circuit_designer"><i class="fas fa-drafting-compass"></i> Designer</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-toolbox me-2"></i>Toolbox
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="toolboxAccordion">
+                            <div class="accordion-item">
+                                <h6 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#logicGates">
+                                        <i class="fas fa-logic me-2"></i>Logic Gates
+                                    </button>
+                                </h6>
+                                <div id="logicGates" class="accordion-collapse collapse show" data-bs-parent="#toolboxAccordion">
+                                    <div class="accordion-body">
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-primary btn-sm" onclick="addComponent('AND')">AND Gate</button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="addComponent('OR')">OR Gate</button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="addComponent('NOT')">NOT Gate</button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="addComponent('NAND')">NAND Gate</button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="addComponent('NOR')">NOR Gate</button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="addComponent('XOR')">XOR Gate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h6 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#inputOutput">
+                                        <i class="fas fa-plug me-2"></i>Input/Output
+                                    </button>
+                                </h6>
+                                <div id="inputOutput" class="accordion-collapse collapse" data-bs-parent="#toolboxAccordion">
+                                    <div class="accordion-body">
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-success btn-sm" onclick="addComponent('INPUT')">Input</button>
+                                            <button class="btn btn-outline-warning btn-sm" onclick="addComponent('OUTPUT')">Output</button>
+                                            <button class="btn btn-outline-info btn-sm" onclick="addComponent('CLOCK')">Clock</button>
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="addComponent('GROUND')">Ground</button>
+                                            <button class="btn btn-outline-danger btn-sm" onclick="addComponent('VCC')">VCC</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h6 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#complexICs">
+                                        <i class="fas fa-microchip me-2"></i>Complex ICs
+                                    </button>
+                                </h6>
+                                <div id="complexICs" class="accordion-collapse collapse" data-bs-parent="#toolboxAccordion">
+                                    <div class="accordion-body">
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="addComponent('74138')">74138 Decoder</button>
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="addComponent('74151')">74151 Mux</button>
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="addComponent('74147')">74147 Encoder</button>
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="addComponent('74157')">74157 Mux</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow mt-3">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-cog me-2"></i>Design Tools
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success btn-sm" onclick="validateCircuit()">
+                                <i class="fas fa-check-circle me-2"></i>Validate
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="simulateCircuit()">
+                                <i class="fas fa-play me-2"></i>Simulate
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="optimizeCircuit()">
+                                <i class="fas fa-magic me-2"></i>Optimize
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="exportCircuit()">
+                                <i class="fas fa-download me-2"></i>Export
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="clearDesign()">
+                                <i class="fas fa-trash me-2"></i>Clear
+                            </button>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="mb-2">
+                            <label class="form-label small">Grid Snap:</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="gridSnap" checked>
+                                <label class="form-check-label small" for="gridSnap">Enable</label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <label class="form-label small">Auto-Route:</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="autoRoute">
+                                <label class="form-check-label small" for="autoRoute">Enable</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-drafting-compass me-2"></i>Circuit Design Canvas
+                        </h5>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-outline-light btn-sm" onclick="zoomIn()" title="Zoom In">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="btn btn-outline-light btn-sm" onclick="zoomOut()" title="Zoom Out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="btn btn-outline-light btn-sm" onclick="resetZoom()" title="Reset Zoom">
+                                <i class="fas fa-compress-arrows-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="designCanvas" class="designer-canvas position-relative">
+                            <div id="welcome-designer" class="text-center text-muted mt-5 pt-5">
+                                <i class="fas fa-drafting-compass fa-4x mb-3"></i>
+                                <h4>Circuit Designer</h4>
+                                <p>Select components from the toolbox to start designing your circuit</p>
+                                <div class="mt-4">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-3">
+                                            <div class="p-3 border rounded">
+                                                <i class="fas fa-mouse-pointer fa-2x text-primary mb-2"></i>
+                                                <h6>Drag & Drop</h6>
+                                                <small>Add components to canvas</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="p-3 border rounded">
+                                                <i class="fas fa-link fa-2x text-success mb-2"></i>
+                                                <h6>Connect</h6>
+                                                <small>Wire components together</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="p-3 border rounded">
+                                                <i class="fas fa-play fa-2x text-warning mb-2"></i>
+                                                <h6>Simulate</h6>
+                                                <small>Test your design</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <svg id="designSVG" class="design-svg" width="100%" height="600">
+                                <!-- Grid pattern -->
+                                <defs>
+                                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-list me-2"></i>Design Log
+                                </h6>
+                            </div>
+                            <div class="card-body design-log">
+                                <div id="designLog" class="font-monospace small">
+                                    <div class="text-muted">Design activity will appear here...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>Circuit Properties
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="circuitProperties">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="small text-muted">Components</div>
+                                            <div id="componentCount" class="fw-bold">0</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="small text-muted">Connections</div>
+                                            <div id="wireCount" class="fw-bold">0</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="small text-muted">Complexity</div>
+                                            <div id="complexityScore" class="fw-bold">Low</div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="small">
+                                        <div><strong>Power Consumption:</strong> <span id="powerConsumption">0 mW</span></div>
+                                        <div><strong>Propagation Delay:</strong> <span id="propagationDelay">0 ns</span></div>
+                                        <div><strong>Gate Count:</strong> <span id="gateCount">0</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Component Properties Modal -->
+    <div class="modal fade" id="componentPropertiesModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="propertiesModalTitle">
+                        <i class="fas fa-cog me-2"></i>Component Properties
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="propertiesModalBody">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="applyComponentProperties()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/circuit_designer.js"></script>
+</body>
+</html>
